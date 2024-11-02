@@ -1,0 +1,58 @@
+<!-- add.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Contact</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="phone-book">
+  <h2>Add Contact</h2>
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" id="name" placeholder="Enter name">
+  </div>
+  <div class="form-group">
+    <label for="phone">Phone Number</label>
+    <input type="text" id="phone" placeholder="Enter 10-digit phone number">
+    <div id="phone-error" class="error-message">Phone number must be exactly 10 digits and contain only numbers.</div>
+  </div>
+  <button class="btn" onclick="addContact()">Add Contact</button>
+  
+  <nav>
+    <a href="display.html">View Contacts</a>
+  </nav>
+</div>
+
+<script>
+  function validatePhoneNumber(phone) {
+    const phoneError = document.getElementById("phone-error");
+    if (/^\d{10}$/.test(phone)) {
+      phoneError.style.display = "none";
+      return true;
+    } else {
+      phoneError.style.display = "block";
+      return false;
+    }
+  }
+
+  function addContact() {
+    const name = document.getElementById("name").value;
+    const phone = document.getElementById("phone").value;
+
+    if (name && validatePhoneNumber(phone)) {
+      const contacts = JSON.parse(localStorage.getItem("contacts")) || [];
+      contacts.push({ name, phone });
+      localStorage.setItem("contacts", JSON.stringify(contacts));
+      document.getElementById("name").value = '';
+      document.getElementById("phone").value = '';
+      alert("Contact added successfully!");
+    }
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!-- update.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Update Contact</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="phone-book">
+  <h2>Update Contact</h2>
+  <div class="form-group">
+    <label for="search-name">Enter Contact Name to Update</label>
+    <input type="text" id="search-name" placeholder="Enter name">
+  </div>
+  <button class="btn" onclick="searchContact()">Find Contact</button>
+
+  <div class="update-section" id="update-section" style="display: none;">
+    <h3>Update Details</h3>
+    <div class="form-group">
+      <label for="update-name">New Name</label>
+      <input type="text" id="update-name" placeholder="Enter new name">
+    </div>
+    <div class="form-group">
+      <label for="update-phone">New Phone Number</label>
+      <input type="text" id="update-phone" placeholder="Enter 10-digit phone number">
+      <div id="update-phone-error" class="error-message">Phone number must be exactly 10 digits and contain only numbers.</div>
+    </div>
+    <button class="btn" onclick="updateContact()">Save Changes</button>
+  </div>
+
+  <nav>
+    <a href="add.html">Add Contact</a>
+    <a href="display.html">View Contacts</a>
+  </nav>
+</div>
+
+<script>
+  let currentIndex = null;
+
+  function searchContact() {
+    const searchName = document.getElementById("search-name").value.toLowerCase();
+    const contacts = JSON.parse(localStorage.getItem("contacts")) || [];
+    currentIndex = contacts.findIndex(contact => contact.name.toLowerCase() === searchName);
+
+    if (currentIndex >= 0) {
+      document.getElementById("update-section").style.display = "block";
+      document.getElementById("update-name").value = contacts[currentIndex].name;
+      document.getElementById("update-phone").value = contacts[currentIndex].phone;
+    } else {
+      alert("Contact not found!");
+    }
+  }
+
+  function validateUpdatePhoneNumber(phone) {
+    const updatePhoneError = document.getElementById("update-phone-error");
+    if (/^\d{10}$/.test(phone)) {
+      updatePhoneError.style.display = "none";
+      return true;
+    } else {
+      updatePhoneError.style.display = "block";
+      return false;
+    }
+  }
+
+  function updateContact() {
+    const newName = document.getElementById("update-name").value;
+    const newPhone = document.getElementById("update-phone").value;
+
+    if (newName && validateUpdatePhoneNumber(newPhone)) {
+      const contacts = JSON.parse(localStorage.getItem("contacts")) || [];
+      contacts[currentIndex] = { name: newName, phone: newPhone };
+      localStorage.setItem("contacts", JSON.stringify(contacts));
+      alert("Contact updated successfully!");
+      window.location.href = "display.html";
+    }
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!-- display.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Display Contacts</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="phone-book">
+  <h2>Contacts List</h2>
+  <div class="contact-list" id="contact-list">
+    <!-- Contacts will appear here -->
+  </div>
+  
+  <nav>
+    <a href="add.html">Add Contact</a>
+    <a href="update.html">Update Contact</a>
+  </nav>
+</div>
+
+<script>
+  function renderContacts() {
+    const contactList = document.getElementById("contact-list");
+    contactList.innerHTML = '';
+    const contacts = JSON.parse(localStorage.getItem("contacts")) || [];
+
+    contacts.forEach((contact, index) => {
+      const contactItem = document.createElement("div");
+      contactItem.classList.add("contact-item");
+
+      contactItem.innerHTML = `<span class="contact-name">${contact.name}</span>
+                               <span class="contact-phone">${contact.phone}</span>`;
+      contactList.appendChild(contactItem);
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", renderContacts);
+</script>
+
+</body>
+</html>
